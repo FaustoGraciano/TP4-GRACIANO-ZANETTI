@@ -5,7 +5,7 @@
  *  Author: vfperri
  */ 
 
-extern volatile uint8_t suspendFlag;
+extern volatile uint8_t selected_color;
 
 #ifndef SERIALPORT_H_
 	#define SERIALPORT_H_

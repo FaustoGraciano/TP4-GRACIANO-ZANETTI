@@ -9,13 +9,9 @@
 
 // ------ Definiciones de Funciones Públicas -------------------
 
-/*ISR(USART_RX_vect) {
-	char receivedChar = UDR0;
-	if (receivedChar == 's' || receivedChar == 'S') {
-		// Toggle de la bandera de suspensión
-		suspendFlag = !suspendFlag;
-	}
-}*/
+ISR(USART_RX_vect) {
+selected_color = UDR0;
+}
 
 // Inicialización de Puerto Serie
 
