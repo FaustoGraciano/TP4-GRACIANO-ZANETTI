@@ -6,57 +6,53 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include "serialPort.h"
+#include "PWMsoft.h"
 
 #define BR9600 0x67	// 0x67=103 configura BAUDRATE=9600@16MHz
 
-//PWM
-#define PWM_PERIOD 255 //PARA 8 BITS
-//#define PWM_DELTA 64	//ANCHO DE PULSO (HACERLO VARIABLE DARA LA INTENSIDAD DEL COLOR) (TODO MODO INVERTIDO) 
-#define PWM_OFF PORTB &= ~(1<<PORTB5)
-#define PWM_ON PORTB |= (1<<PORTB5)
-#define PWM_START DDRB |= (1<<PORTB5)
-
-void PWM_update();
-uint8_t PWM_DELTA=250;
-
+void set_pwm(uint8_t red, uint8_t green, uint8_t blue);
+volatile uint8_t red = 255;
+volatile uint8_t selected_color;
 //TIMERS
-//void configurarTimer1();
+void configurarTimer1();
 void configurarTimer0();
 
 int main(void)
-{	PWM_START; //inicio pwm
+{  	DDRB |= (1<<PORTB5) | (1<<PORTB1)| (1<<PORTB2);
 	configurarTimer0();
-//	configurarTimer1();
-	SerialPort_Init(BR9600);   // Inicializo formato 8N1 y BAUDRATE = 9600bps
-	SerialPort_TX_Enable();		// Activo el transmisor del Puerto Serie
-	SerialPort_RX_Enable();			// Activo el Receptor del Puerto Serie
-	SerialPort_RX_Interrupt_Enable(); // habilitacion de las interrupciones del receptor
+	configurarTimer1();
+    configurarUART();
 	sei();								// habilitacion de interrupciones globales
+	uint8_t green = 255, blue = 255;
 	
     while (1) 
     {
 
+
+	 /*  switch (selected_color) {
+	       case 'R':
+	       red = pwm_value;
+	       break;
+	       case 'G':
+	       green = pwm_value;
+	       break;
+	       case 'B':
+	       blue = pwm_value;
+	       break;
+       }
+*/	   // Establecer el valor PWM
+	   set_pwm(red, green, blue);
     }
 return 0;
 }
 
 
 // Función para configurar el Timer1
-/*void configurarTimer1() {
-	TCCR1A = 0;
-	TCCR1B |= (1 << WGM12) | (1 << CS11) | (1 << CS10); // Modo CTC, prescaler de 64
-	OCR1A = 249; // Configurar OCR1A para que el comparador coincida cada 1 milisegundo
-	TIMSK1 |= (1 << OCIE1A); // Habilitar interrupción de comparador A
-}*/
-
-
-// ISR del TIMER1
-//ISR(TIMER1_COMPA_vect) {
-	
-//}
-
-
-
+void configurarTimer1() {
+	 TCCR1A |= (1 << COM1A1) | (1 << COM1A0) | (1 << COM1B1) | (1 << COM1B0) | (1 << WGM10); // Modo inv
+	TCCR1B |=(1<<WGM12) | (1<<WGM10) | (1<<CS11); // Modo 5 PWM, prescaler de 8
+  //	TIMSK1 |= (1 << OCIE1A) | (1 << OCIE1B); // Habilitar interrupción de comparador A y B
+}
 //Configuracion de TIMER0
 
 void configurarTimer0()
@@ -68,20 +64,21 @@ void configurarTimer0()
 
 }
 
-//FUNCION DE PWM
-void PWM_update(){
-static uint16_t PWM_position=0;
-	if (++PWM_position>=PWM_PERIOD){
-		PWM_position=0;
-	}
-	if(PWM_position<PWM_DELTA){
-		PWM_ON;}
-	else{
-		PWM_OFF;	
-	}	
-	
+
+void configurarUART()
+{ SerialPort_Init(BR9600);   // Inicializo formato 8N1 y BAUDRATE = 9600bps
+  SerialPort_TX_Enable();		// Activo el transmisor del Puerto Serie
+  SerialPort_RX_Enable();			// Activo el Receptor del Puerto Serie
+  SerialPort_RX_Interrupt_Enable(); // habilitacion de las interrupciones del receptor
+}
+
+
+void set_pwm(uint8_t red, uint8_t green, uint8_t blue) {
+	OCR0A = red;   // PB5
+	OCR1B = green; // PB2
+	OCR1A = blue;  // PB1
 }
 
 ISR(TIMER0_COMPA_vect){
-	PWM_update(PWM_DELTA);
+	PWM_update();
 }
