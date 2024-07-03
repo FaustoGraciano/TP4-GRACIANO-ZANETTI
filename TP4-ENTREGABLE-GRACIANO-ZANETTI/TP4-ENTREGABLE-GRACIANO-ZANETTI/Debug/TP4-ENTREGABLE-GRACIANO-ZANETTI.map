@@ -14,7 +14,7 @@ f:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-selected_color      0x1               main.o
+pwm_value           0x1               main.o
 
 Discarded input sections
 
@@ -23,6 +23,8 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text.configurarUART
+                0x00000000       0x14 main.o
  .text          0x00000000        0x0 PWMsoft.o
  .data          0x00000000        0x0 PWMsoft.o
  .bss           0x00000000        0x0 PWMsoft.o
@@ -256,7 +258,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x210
+.text           0x00000000      0x28a
  *(.vectors)
  .vectors       0x00000000       0x68 F:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -341,45 +343,48 @@ END GROUP
                 0x000000a2                __vector_20
                 0x000000a6                . = ALIGN (0x2)
  *(.text.*)
+ .text.adc_read
+                0x000000a6       0x24 main.o
+                0x000000a6                adc_read
+ .text.adc_init
+                0x000000ca       0x20 main.o
+                0x000000ca                adc_init
  .text.configurarTimer1
-                0x000000a6       0x16 main.o
-                0x000000a6                configurarTimer1
+                0x000000ea       0x16 main.o
+                0x000000ea                configurarTimer1
  .text.configurarTimer0
-                0x000000bc       0x1e main.o
-                0x000000bc                configurarTimer0
- .text.configurarUART
-                0x000000da       0x14 main.o
-                0x000000da                configurarUART
- .text.set_pwm  0x000000ee       0x18 main.o
-                0x000000ee                set_pwm
- .text.main     0x00000106       0x22 main.o
-                0x00000106                main
+                0x00000100       0x1e main.o
+                0x00000100                configurarTimer0
+ .text.set_pwm  0x0000011e       0x18 main.o
+                0x0000011e                set_pwm
+ .text.main     0x00000136       0x6c main.o
+                0x00000136                main
  .text.__vector_14
-                0x00000128       0x48 main.o
-                0x00000128                __vector_14
+                0x000001a2       0x48 main.o
+                0x000001a2                __vector_14
  .text.PWM_update
-                0x00000170       0x44 PWMsoft.o
-                0x00000170                PWM_update
+                0x000001ea       0x44 PWMsoft.o
+                0x000001ea                PWM_update
  .text.__vector_18
-                0x000001b4       0x20 serialPort.o
-                0x000001b4                __vector_18
+                0x0000022e       0x20 serialPort.o
+                0x0000022e                __vector_18
  .text.SerialPort_Init
-                0x000001d4       0x14 serialPort.o
-                0x000001d4                SerialPort_Init
+                0x0000024e       0x14 serialPort.o
+                0x0000024e                SerialPort_Init
  .text.SerialPort_TX_Enable
-                0x000001e8        0xc serialPort.o
-                0x000001e8                SerialPort_TX_Enable
+                0x00000262        0xc serialPort.o
+                0x00000262                SerialPort_TX_Enable
  .text.SerialPort_RX_Enable
-                0x000001f4        0xc serialPort.o
-                0x000001f4                SerialPort_RX_Enable
+                0x0000026e        0xc serialPort.o
+                0x0000026e                SerialPort_RX_Enable
  .text.SerialPort_RX_Interrupt_Enable
-                0x00000200        0xc serialPort.o
-                0x00000200                SerialPort_RX_Interrupt_Enable
-                0x0000020c                . = ALIGN (0x2)
+                0x0000027a        0xc serialPort.o
+                0x0000027a                SerialPort_RX_Interrupt_Enable
+                0x00000286                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000020c        0x0 f:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000020c                _exit
-                0x0000020c                exit
+ .fini9         0x00000286        0x0 f:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000286                _exit
+                0x00000286                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -398,16 +403,17 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000020c        0x4 f:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000286        0x4 f:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000210                _etext = .
+                0x0000028a                _etext = .
 
-.data           0x00800100        0x2 load address 0x00000210
+.data           0x00800100        0x2 load address 0x0000028a
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
- .data.red      0x00800100        0x1 main.o
-                0x00800100                red
+ .data.selected_color
+                0x00800100        0x1 main.o
+                0x00800100                selected_color
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
@@ -417,24 +423,26 @@ END GROUP
                 0x00800102                _edata = .
                 0x00800102                PROVIDE (__data_end, .)
 
-.bss            0x00800102        0x3
+.bss            0x00800102        0x4
                 0x00800102                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.red       0x00800102        0x1 main.o
+                0x00800102                red
  .bss.PWM_position.1605
-                0x00800102        0x2 PWMsoft.o
+                0x00800103        0x2 PWMsoft.o
  *(COMMON)
- COMMON         0x00800104        0x1 main.o
-                0x00800104                selected_color
-                0x00800105                PROVIDE (__bss_end, .)
-                0x00000210                __data_load_start = LOADADDR (.data)
-                0x00000212                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800105        0x1 main.o
+                0x00800105                pwm_value
+                0x00800106                PROVIDE (__bss_end, .)
+                0x0000028a                __data_load_start = LOADADDR (.data)
+                0x0000028c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800105        0x0
+.noinit         0x00800106        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800105                _end = .
+                0x00800106                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -501,24 +509,24 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xf0
+.debug_aranges  0x00000000      0x100
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x48 main.o
+                0x00000000       0x58 main.o
  .debug_aranges
-                0x00000048       0x20 PWMsoft.o
+                0x00000058       0x20 PWMsoft.o
  .debug_aranges
-                0x00000068       0x88 serialPort.o
+                0x00000078       0x88 serialPort.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xbf2
+.debug_info     0x00000000      0xc5d
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 F:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4      0x23e main.o
- .debug_info    0x00000832       0xb5 PWMsoft.o
- .debug_info    0x000008e7      0x30b serialPort.o
+ .debug_info    0x000005f4      0x2a9 main.o
+ .debug_info    0x0000089d       0xb5 PWMsoft.o
+ .debug_info    0x00000952      0x30b serialPort.o
 
 .debug_abbrev   0x00000000      0x8e7
  *(.debug_abbrev)
@@ -527,33 +535,33 @@ END GROUP
  .debug_abbrev  0x0000070b       0x78 PWMsoft.o
  .debug_abbrev  0x00000783      0x164 serialPort.o
 
-.debug_line     0x00000000      0x65f
+.debug_line     0x00000000      0x707
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x134 F:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_line    0x00000134      0x193 main.o
- .debug_line    0x000002c7       0xc7 PWMsoft.o
- .debug_line    0x0000038e      0x2d1 serialPort.o
+ .debug_line    0x00000134      0x23b main.o
+ .debug_line    0x0000036f       0xc7 PWMsoft.o
+ .debug_line    0x00000436      0x2d1 serialPort.o
 
-.debug_frame    0x00000000      0x230
+.debug_frame    0x00000000      0x250
  *(.debug_frame)
- .debug_frame   0x00000000       0xbc main.o
- .debug_frame   0x000000bc       0x24 PWMsoft.o
- .debug_frame   0x000000e0      0x150 serialPort.o
+ .debug_frame   0x00000000       0xdc main.o
+ .debug_frame   0x000000dc       0x24 PWMsoft.o
+ .debug_frame   0x00000100      0x150 serialPort.o
 
-.debug_str      0x00000000      0x570
+.debug_str      0x00000000      0x58c
  *(.debug_str)
  .debug_str     0x00000000      0x208 F:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208      0x218 main.o
-                                0x259 (size before relaxing)
- .debug_str     0x00000420       0x1c PWMsoft.o
+ .debug_str     0x00000208      0x234 main.o
+                                0x275 (size before relaxing)
+ .debug_str     0x0000043c       0x1c PWMsoft.o
                                 0x1a7 (size before relaxing)
- .debug_str     0x0000043c      0x134 serialPort.o
+ .debug_str     0x00000458      0x134 serialPort.o
                                 0x318 (size before relaxing)
 
-.debug_loc      0x00000000      0x3a7
+.debug_loc      0x00000000      0x3fb
  *(.debug_loc)
- .debug_loc     0x00000000       0xcb main.o
- .debug_loc     0x000000cb      0x2dc serialPort.o
+ .debug_loc     0x00000000      0x11f main.o
+ .debug_loc     0x0000011f      0x2dc serialPort.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -573,11 +581,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xc0
+.debug_ranges   0x00000000       0xd0
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x38 main.o
- .debug_ranges  0x00000038       0x10 PWMsoft.o
- .debug_ranges  0x00000048       0x78 serialPort.o
+ .debug_ranges  0x00000000       0x48 main.o
+ .debug_ranges  0x00000048       0x10 PWMsoft.o
+ .debug_ranges  0x00000058       0x78 serialPort.o
 
 .debug_macro
  *(.debug_macro)
