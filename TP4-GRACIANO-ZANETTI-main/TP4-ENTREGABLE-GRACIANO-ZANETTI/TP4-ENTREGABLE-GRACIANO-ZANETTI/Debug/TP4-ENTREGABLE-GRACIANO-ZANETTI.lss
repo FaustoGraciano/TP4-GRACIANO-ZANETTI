@@ -151,7 +151,7 @@ void configurarUART()
   f4:	e1 e8       	ldi	r30, 0x81	; 129
   f6:	f0 e0       	ldi	r31, 0x00	; 0
   f8:	80 81       	ld	r24, Z
-  fa:	8b 60       	ori	r24, 0x0B	; 11
+  fa:	8a 60       	ori	r24, 0x0A	; 10
   fc:	80 83       	st	Z, r24
   fe:	08 95       	ret
 
@@ -188,24 +188,24 @@ void set_pwm(uint8_t green, uint8_t blue) {
  132:	08 95       	ret
 
 00000134 <main>:
-//TIMERS
+//FUNCIONES DE TIMERS
 void configurarTimer1();
 void configurarTimer0();
 
 int main(void)
-{  	DDRB |= (1<<PORTB5) | (1<<PORTB1)| (1<<PORTB2);
+{  	DDRB |= (1<<PORTB5) | (1<<PORTB1)| (1<<PORTB2); //seteo terminales PB1,PB2, PB5 como salida
  134:	84 b1       	in	r24, 0x04	; 4
  136:	86 62       	ori	r24, 0x26	; 38
  138:	84 b9       	out	0x04, r24	; 4
-	DDRC &= ~(1<<PORTC3);
+	DDRC &= ~(1<<PORTC3);							//seteo terminal PB3 como entrada
  13a:	87 b1       	in	r24, 0x07	; 7
  13c:	87 7f       	andi	r24, 0xF7	; 247
  13e:	87 b9       	out	0x07, r24	; 7
-	adc_init();
+	adc_init();					//configuro adc
  140:	0e 94 65 00 	call	0xca	; 0xca <adc_init>
-	configurarTimer0();
+	configurarTimer0();			//configuro timer0
  144:	0e 94 80 00 	call	0x100	; 0x100 <configurarTimer0>
-	configurarTimer1();
+	configurarTimer1();			//configuro timer1
  148:	0e 94 75 00 	call	0xea	; 0xea <configurarTimer1>
     SerialPort_Init(BR9600);   // Inicializo formato 8N1 y BAUDRATE = 9600bps
  14c:	87 e6       	ldi	r24, 0x67	; 103
@@ -218,22 +218,22 @@ int main(void)
  15a:	0e 94 3a 01 	call	0x274	; 0x274 <SerialPort_RX_Interrupt_Enable>
 	sei();								// habilitacion de interrupciones globales
  15e:	78 94       	sei
-	uint8_t green = 0, blue = 0;
+	uint8_t green = 0, blue = 0;		//variables de colores
  160:	d0 e0       	ldi	r29, 0x00	; 0
  162:	c0 e0       	ldi	r28, 0x00	; 0
 
     while (1) 
     {	
-		if (selected_color != 'E') {
+		if (selected_color != 'E') {	//si selected color es diferente al enter entro a modificar un color
  164:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
  168:	85 34       	cpi	r24, 0x45	; 69
  16a:	e1 f3       	breq	.-8      	; 0x164 <main+0x30>
 	   
-			pwm_value = adc_read();
+			pwm_value = adc_read();		//leo el adc
  16c:	0e 94 53 00 	call	0xa6	; 0xa6 <adc_read>
  170:	80 93 05 01 	sts	0x0105, r24	; 0x800105 <pwm_value>
-		//SerialPort_Send_Data(pwm_value);
-         switch (selected_color) {
+			
+         switch (selected_color) {		//modifico color segun lectura
  174:	90 91 00 01 	lds	r25, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
  178:	97 34       	cpi	r25, 0x47	; 71
  17a:	51 f0       	breq	.+20     	; 0x190 <main+0x5c>
@@ -255,7 +255,7 @@ int main(void)
  18c:	d8 2f       	mov	r29, r24
 	       break;
  18e:	01 c0       	rjmp	.+2      	; 0x192 <main+0x5e>
-         switch (selected_color) {
+         switch (selected_color) {		//modifico color segun lectura
 	       case 'R':
 	       red = pwm_value;
 	       break;
@@ -267,7 +267,7 @@ int main(void)
 	       break;
        }
 // Establecer el valor PWM
-	   set_pwm(green, blue);
+	   set_pwm(green, blue);		//seteo colores segun el valor leido.
  192:	6d 2f       	mov	r22, r29
  194:	8c 2f       	mov	r24, r28
  196:	0e 94 8f 00 	call	0x11e	; 0x11e <set_pwm>
@@ -297,7 +297,7 @@ ISR(TIMER0_COMPA_vect){
  1b8:	bf 93       	push	r27
  1ba:	ef 93       	push	r30
  1bc:	ff 93       	push	r31
-	PWM_update();
+	PWM_update();			//actualizo la señal PWM del color rojo
  1be:	0e 94 f2 00 	call	0x1e4	; 0x1e4 <PWM_update>
  1c2:	ff 91       	pop	r31
  1c4:	ef 91       	pop	r30
@@ -322,8 +322,8 @@ ISR(TIMER0_COMPA_vect){
 
 //FUNCION DE PWM
 void PWM_update(){
-	static uint16_t PWM_position=0;
-	if (++PWM_position>=PWM_PERIOD){
+	static uint16_t PWM_position=0;		//variable contador
+	if (++PWM_position>=PWM_PERIOD){	//si llego a valor de periodo la reinicio.
  1e4:	80 91 03 01 	lds	r24, 0x0103	; 0x800103 <PWM_position.1605>
  1e8:	90 91 04 01 	lds	r25, 0x0104	; 0x800104 <PWM_position.1605+0x1>
  1ec:	01 96       	adiw	r24, 0x01	; 1
@@ -336,7 +336,7 @@ void PWM_update(){
  1fc:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <PWM_position.1605+0x1>
  200:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <PWM_position.1605>
 	}
-	if(PWM_position< red){
+	if(PWM_position< red){		//si es menor a valor de pulso, terminal en nivel bajo
  204:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <__data_end>
  208:	90 e0       	ldi	r25, 0x00	; 0
  20a:	20 91 03 01 	lds	r18, 0x0103	; 0x800103 <PWM_position.1605>
@@ -350,7 +350,7 @@ void PWM_update(){
  21c:	85 b9       	out	0x05, r24	; 5
  21e:	08 95       	ret
 	else{
-		PWM_ON;
+		PWM_ON;		//si no terminal en nivel alto.
  220:	85 b1       	in	r24, 0x05	; 5
  222:	80 62       	ori	r24, 0x20	; 32
  224:	85 b9       	out	0x05, r24	; 5

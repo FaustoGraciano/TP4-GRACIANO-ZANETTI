@@ -24,30 +24,30 @@ volatile uint8_t red = 0;
 volatile uint8_t selected_color='E';
 uint8_t pwm_value;
 
-//TIMERS
+//FUNCIONES DE TIMERS
 void configurarTimer1();
 void configurarTimer0();
 
 int main(void)
-{  	DDRB |= (1<<PORTB5) | (1<<PORTB1)| (1<<PORTB2);
-	DDRC &= ~(1<<PORTC3);
-	adc_init();
-	configurarTimer0();
-	configurarTimer1();
+{  	DDRB |= (1<<PORTB5) | (1<<PORTB1)| (1<<PORTB2); //seteo terminales PB1,PB2, PB5 como salida
+	DDRC &= ~(1<<PORTC3);							//seteo terminal PB3 como entrada
+	adc_init();					//configuro adc
+	configurarTimer0();			//configuro timer0
+	configurarTimer1();			//configuro timer1
     SerialPort_Init(BR9600);   // Inicializo formato 8N1 y BAUDRATE = 9600bps
     SerialPort_TX_Enable();		// Activo el transmisor del Puerto Serie
     SerialPort_RX_Enable();			// Activo el Receptor del Puerto Serie
     SerialPort_RX_Interrupt_Enable(); // habilitacion de las interrupciones del receptor
 	sei();								// habilitacion de interrupciones globales
-	uint8_t green = 0, blue = 0;
+	uint8_t green = 0, blue = 0;		//variables de colores
 
     while (1) 
     {	
-		if (selected_color != 'E') {
+		if (selected_color != 'E') {	//si selected color es diferente al enter entro a modificar un color
 	   
-			pwm_value = adc_read();
-		//SerialPort_Send_Data(pwm_value);
-         switch (selected_color) {
+			pwm_value = adc_read();		//leo el adc
+			
+         switch (selected_color) {		//modifico color segun lectura
 	       case 'R':
 	       red = pwm_value;
 	       break;
@@ -59,7 +59,7 @@ int main(void)
 	       break;
        }
 // Establecer el valor PWM
-	   set_pwm(green, blue);
+	   set_pwm(green, blue);		//seteo colores segun el valor leido.
     }
 	}
 return 0;
@@ -85,8 +85,7 @@ void adc_init() {
 // Función para configurar el Timer1
 void configurarTimer1() {
 	 TCCR1A |= (1<< COM1A1) | (1 << COM1A0) | (1 << COM1B1) | (1 << COM1B0) | (1 << WGM10); // Modo inv
-	TCCR1B |=(1<<WGM12) | (1<<WGM10) | (1<<CS11); // Modo 5 PWM, prescaler de 8
-  //	TIMSK1 |= (1 << OCIE1A) | (1 << OCIE1B); // Habilitar interrupción de comparador A y B
+	TCCR1B |=(1<<WGM12) | (1<<CS11); // Modo 5 PWM, prescaler de 8
 }
 //Configuracion de TIMER0
 
@@ -114,5 +113,5 @@ void set_pwm(uint8_t green, uint8_t blue) {
 }
 
 ISR(TIMER0_COMPA_vect){
-	PWM_update();
+	PWM_update();			//actualizo la señal PWM del color rojo
 }

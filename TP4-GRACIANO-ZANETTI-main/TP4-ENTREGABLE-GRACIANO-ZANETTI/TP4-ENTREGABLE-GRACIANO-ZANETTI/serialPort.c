@@ -10,7 +10,7 @@
 // ------ Definiciones de Funciones Públicas -------------------
 
 ISR(USART_RX_vect) {
-selected_color = UDR0;
+selected_color = UDR0;	//asigno lo almacenado en el uart a variable global
 
 }
 
