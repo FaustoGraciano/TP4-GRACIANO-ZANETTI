@@ -40,8 +40,8 @@ Para ejecutar el programa:
 ## Ejemplo de Uso
 
 1. Enviar `R` por la interfaz UART0.
-2. Ajustar el potenciómetro para cambiar la intensidad del color rojo, para finalizar el ajuste, presionar E.
+2. Ajustar el potenciómetro para cambiar la intensidad del color rojo, para finalizar el ajuste, presionar `E`.
 3. Enviar `G` por la interfaz UART0.
-4. Ajustar el potenciómetro para cambiar la intensidad del color verde, para finalizar el ajuste, presionar E.
+4. Ajustar el potenciómetro para cambiar la intensidad del color verde, para finalizar el ajuste, presionar `E`.
 5. Enviar `B` por la interfaz UART0.
-6. Ajustar el potenciómetro para cambiar la intensidad del color azul, para finalizar el ajuste, presionar E.
+6. Ajustar el potenciómetro para cambiar la intensidad del color azul, para finalizar el ajuste, presionar `E`.
