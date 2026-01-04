@@ -1,5 +1,3 @@
-# TP4-GRACIANO-ZANETTI
-
 # Control de LED RGB con PWM
 
 Este programa permite controlar la intensidad y el color de un LED RGB utilizando la técnica de Modulación por Ancho de Pulso (PWM). El LED RGB está conectado a los terminales PB5, PB2 y PB1 del microcontrolador en configuración de ánodo común.
